@@ -5,11 +5,14 @@ import time
 
 def get_status():
     cpu_usage = psutil.cpu_percent(interval=1)
+    mem_usage = psutil.virtual_memory().percent
+    
+    print(f"[{time.strftime('%H:%M:%S')}] CPU: {cpu_usage:>5}% | 内存: {mem_usage:>5}%")
 
-    memory = psutil.virtual_memory()
-    mem_usage = memory.percent #只提取百分比数据
-
-    print(f"CPU使用率：{cpu_usage}%")
-    print(f"内存使用率{mem_usage}%")
-
-get_status()
+try:
+    print("开始监控系统状态 (按 Ctrl+C 停止)...")
+    while True:
+        get_status()
+        time.sleep(2) # 每隔2秒监控一次
+except KeyboardInterrupt:
+    print("\n监控已停止。")
